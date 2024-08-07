@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEMBAYARAN</title>
+    <style>
+        .summary {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
+        .price {
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+    <script>
+        function updatePrice() {
+            var nasiHarga = document.querySelector('input[name="Nasi"]:checked') ? parseFloat(document.querySelector('input[name="Nasi"]:checked').getAttribute('data-price')) : 0;
+            var ayamHarga = document.querySelector('input[name="Ayam"]:checked') ? parseFloat(document.querySelector('input[name="Ayam"]:checked').getAttribute('data-price')) : 0;
+            var bebekHarga = document.querySelector('input[name="Bebek"]:checked') ? parseFloat(document.querySelector('input[name="Bebek"]:checked').getAttribute('data-price')) : 0;
+            var leleHarga = document.querySelector('input[name="Lele"]:checked') ? parseFloat(document.querySelector('input[name="Lele"]:checked').getAttribute('data-price')) : 0;
+
+            var minumanHarga = 0;
+            var minumanList = [];
+            var checkboxes = document.querySelectorAll('input[name="minuman"]:checked');
+            checkboxes.forEach(function(checkbox) {
+                minumanHarga += parseFloat(checkbox.getAttribute('data-price'));
+                minumanList.push(checkbox.nextSibling.textContent.trim());
+            });
+
+            var tahuTempeHarga = 0;
+            var tahuTempeList = [];
+            var tahuTempeCheckboxes = document.querySelectorAll('input[name="tahu_tempe"]:checked');
+            tahuTempeCheckboxes.forEach(function(checkbox) {
+                tahuTempeHarga += parseFloat(checkbox.getAttribute('data-price'));
+                tahuTempeList.push(checkbox.nextSibling.textContent.trim());
+            });
+
+            var totalHarga = nasiHarga + ayamHarga + bebekHarga + leleHarga + minumanHarga + tahuTempeHarga;
+            document.getElementById('total').innerText = "Total Harga: Rp " + totalHarga.toFixed(2);
+        }
+
+        function calculateTotal(event) {
+            event.preventDefault();
+
+            var nama = document.querySelector('input[name="nama"]').value;
+            var noTelp = document.querySelector('input[name="no_telp"]').value;
+            var catatan = document.querySelector('textarea[name="Catatan"]').value;
+
+            if (!nama || !noTelp) {
+                alert('Nama dan nomor telepon harus diisi.');
+                return;
+            }
+            var nasiHarga = document.querySelector('input[name="Nasi"]:checked') ? parseFloat(document.querySelector('input[name="Nasi"]:checked').getAttribute('data-price')) : 0;
+            var ayamHarga = document.querySelector('input[name="Ayam"]:checked') ? parseFloat(document.querySelector('input[name="Ayam"]:checked').getAttribute('data-price')) : 0;
+            var bebekHarga = document.querySelector('input[name="Bebek"]:checked') ? parseFloat(document.querySelector('input[name="Bebek"]:checked').getAttribute('data-price')) : 0;
+            var leleHarga = document.querySelector('input[name="Lele"]:checked') ? parseFloat(document.querySelector('input[name="Lele"]:checked').getAttribute('data-price')) : 0;
+
+            var minumanHarga = 0;
+            var minumanList = [];
+            var minumanCheckboxes = document.querySelectorAll('input[name="minuman"]:checked');
+            minumanCheckboxes.forEach(function(checkbox) {
+                minumanHarga += parseFloat(checkbox.getAttribute('data-price'));
+                minumanList.push(checkbox.nextSibling.textContent.trim());
+            });
+
+            var tahuTempeHarga = 0;
+            var tahuTempeList = [];
+            var tahuTempeCheckboxes = document.querySelectorAll('input[name="tahu_tempe"]:checked');
+            tahuTempeCheckboxes.forEach(function(checkbox) {
+                tahuTempeHarga += parseFloat(checkbox.getAttribute('data-price'));
+                tahuTempeList.push(checkbox.nextSibling.textContent.trim());
+            });
+
+            var totalHarga = nasiHarga + ayamHarga + bebekHarga + leleHarga + minumanHarga + tahuTempeHarga;
+            document.getElementById('total').innerText = "Total Harga: Rp " + totalHarga.toFixed(2);
+
+            var summary = "<strong>Ringkasan Pembelian:</strong><br><br>";
+            summary += "<b>Nama Pembeli:</b> " + nama + "<br>";
+            summary += "<b>No. Telepon:</b> " + noTelp + "<br>";
+            summary += "<b>Catatan:</b> " + catatan + "<br><br>";
+            summary += document.querySelector('input[name="Nasi"]:checked') ? "<b>Nasi:</b> " + document.querySelector('input[name="Nasi"]:checked').nextSibling.textContent.trim() + " (Rp " + nasiHarga.toFixed(2) + ")<br>" : "";
+            summary += document.querySelector('input[name="Ayam"]:checked') ? "<b>Ayam:</b> " + document.querySelector('input[name="Ayam"]:checked').nextSibling.textContent.trim() + " (Rp " + ayamHarga.toFixed(2) + ")<br>" : "";
+            summary += document.querySelector('input[name="Bebek"]:checked') ? "<b>Bebek:</b> " + document.querySelector('input[name="Bebek"]:checked').nextSibling.textContent.trim() + " (Rp " + bebekHarga.toFixed(2) + ")<br>" : "";
+            summary += document.querySelector('input[name="Lele"]:checked') ? "<b>Lele:</b> " + document.querySelector('input[name="Lele"]:checked').nextSibling.textContent.trim() + " (Rp " + leleHarga.toFixed(2) + ")<br>" : "";
+            summary += minumanList.length > 0 ? "<b>Minuman:</b> " + minumanList.join(", ") + " (Rp " + minumanHarga.toFixed(2) + ")<br>" : "";
+            summary += tahuTempeList.length > 0 ? "<b>Tahu Tempe:</b> " + tahuTempeList.join(", ") + " (Rp " + tahuTempeHarga.toFixed(2) + ")<br>" : "";
+            summary += "<b>Total Harga:</b> Rp " + totalHarga.toFixed(2);
+
+            document.getElementById('summary').innerHTML = summary;
+        }
+
+        function resetForm() {
+            document.getElementById('total').innerText = "Total Harga: Rp 0.00";
+            document.getElementById('summary').innerHTML = ""; 
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+                radio.addEventListener('change', updatePrice);
+            });
+            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+                checkbox.addEventListener('change', updatePrice);
+            });
+        });
+    </script>
+</head>
+<body bgcolor="yellow">
+    <h2><b>PEMBAYARAN<br></b></h2>
+    <form id="payment-form" action="PEMBAYARAN" method="post" onreset="resetForm()">
+        <hr>
+        <table>
+            <tr>
+                <td>Nama Pembeli<td>: <input type="text" name="nama" size="30" required>
+            </tr>
+            <tr>
+                <td>No.Telp<td>: <input type="text" name="no_telp" size="30" required>
+            </tr>
+            <tr>
+                <td>Nasi<td>: 
+                    <input type="radio" name="Nasi" value="Putih" data-price="4000"> Putih <span class="price">(Rp 4.000)</span>
+                    <input type="radio" name="Nasi" value="Uduk" data-price="5000"> Uduk <span class="price">(Rp 5.000)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Ayam<td>: 
+                    <input type="radio" name="Ayam" value="Goreng" data-price="12000"> Goreng <span class="price">(Rp 12.000)</span>
+                    <input type="radio" name="Ayam" value="Bakar" data-price="15000"> Bakar <span class="price">(Rp 15.000)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Bebek<td>: 
+                    <input type="radio" name="Bebek" value="Goreng" data-price="25000"> Goreng <span class="price">(Rp 25.000)</span>
+                    <input type="radio" name="Bebek" value="Bakar" data-price="28000"> Bakar <span class="price">(Rp 28.000)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Lele<td>: 
+                    <input type="radio" name="Lele" value="Goreng" data-price="10000"> Goreng <span class="price">(Rp 10.000)</span>
+                    <input type="radio" name="Lele" value="Bakar" data-price="13000"> Bakar <span class="price">(Rp 13.000)</span>
+                </td>
+            </tr>
+			<tr>
+                <td>Tahu Tempe<td>: 
+                    <input type="checkbox" name="tahu_tempe" value="Tahu" data-price="1000"> Tahu <span class="price">(Rp 1.000)</span>
+                    <input type="checkbox" name="tahu_tempe" value="Tempe" data-price="1000"> Tempe <span class="price">(Rp 1.000)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Minuman<td>: 
+                    <input type="checkbox" name="minuman" value="Teh Manis" data-price="4000"> Teh Manis <span class="price">(Rp 4.000)</span>
+                    <input type="checkbox" name="minuman" value="Teh Tawar" data-price="3000"> Teh Tawar <span class="price">(Rp 3.000)</span>
+                    <input type="checkbox" name="minuman" value="Es Jeruk" data-price="6000"> Es Jeruk <span class="price">(Rp 6.000)</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Catatan<td>: <textarea name="Catatan" cols="40" rows="5"></textarea>
+            </tr>
+        </table>
+        <hr>
+        <div id="total">Total Harga: Rp 0.00</div>
+        <br>
+        <input type="submit" value="Kirim" onclick="calculateTotal(event)">
+        <input type="reset" value="Reset">
+    </form>
+    <div id="summary" class="summary"></div> 
+</body>
+</html>
